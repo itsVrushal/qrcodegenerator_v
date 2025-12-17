@@ -12,10 +12,12 @@ const Antigravity = () => {
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
+    const currentCanvas = canvas;
+    const currentCtx = ctx;
 
     let animationFrameId: number;
     let particlesArray: Particle[] = [];
-    
+
     // Mouse state
     const mouse = {
       x: -9999, // Start off-screen
@@ -47,7 +49,14 @@ const Antigravity = () => {
       size: number;
       color: string;
 
-      constructor(x: number, y: number, directionX: number, directionY: number, size: number, color: string) {
+      constructor(
+        x: number,
+        y: number,
+        directionX: number,
+        directionY: number,
+        size: number,
+        color: string
+      ) {
         this.x = x;
         this.y = y;
         this.directionX = directionX;
@@ -57,19 +66,18 @@ const Antigravity = () => {
       }
 
       draw() {
-        if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        ctx.fill();
+        currentCtx.beginPath();
+        currentCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+        currentCtx.fillStyle = this.color;
+        currentCtx.fill();
       }
 
       update() {
         // 1. Boundary Logic (Bounce off edges)
-        if (this.x > canvas.width || this.x < 0) {
+        if (this.x > currentCanvas.width || this.x < 0) {
           this.directionX = -this.directionX;
         }
-        if (this.y > canvas.height || this.y < 0) {
+        if (this.y > currentCanvas.height || this.y < 0) {
           this.directionY = -this.directionY;
         }
 
@@ -79,13 +87,19 @@ const Antigravity = () => {
         const distance = Math.sqrt(dx * dx + dy * dy);
 
         if (distance < mouse.radius + this.size) {
-          if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+          if (
+            mouse.x < this.x &&
+            this.x < currentCanvas.width - this.size * 10
+          ) {
             this.x += 3; // Push right
           }
           if (mouse.x > this.x && this.x > this.size * 10) {
             this.x -= 3; // Push left
           }
-          if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+          if (
+            mouse.y < this.y &&
+            this.y < currentCanvas.height - this.size * 10
+          ) {
             this.y += 3; // Push down
           }
           if (mouse.y > this.y && this.y > this.size * 10) {
@@ -105,19 +119,22 @@ const Antigravity = () => {
     function init() {
       particlesArray = [];
       // Calculate number of particles based on screen area
-      const numberOfParticles = (canvas.height * canvas.width) / 9000;
+      const numberOfParticles =
+        (currentCanvas.height * currentCanvas.width) / 9000;
 
       for (let i = 0; i < numberOfParticles; i++) {
         const size = Math.random() * 2 + 1;
         const x = Math.random() * (window.innerWidth - size * 2) + size * 2;
         const y = Math.random() * (window.innerHeight - size * 2) + size * 2;
-        const directionX = (Math.random() * 1) - 0.5; // Speed range -0.5 to 0.5
-        const directionY = (Math.random() * 1) - 0.5;
-        
-        // Cyan/Blueish color to match your theme (Tailwind Cyan-300)
-        const color = "rgba(103, 232, 249, 0.8)"; 
+        const directionX = Math.random() * 1 - 0.5; // Speed range -0.5 to 0.5
+        const directionY = Math.random() * 1 - 0.5;
 
-        particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+        // Cyan/Blueish color to match your theme (Tailwind Cyan-300)
+        const color = "rgba(103, 232, 249, 0.8)";
+
+        particlesArray.push(
+          new Particle(x, y, directionX, directionY, size, color)
+        );
       }
     }
 
@@ -127,10 +144,15 @@ const Antigravity = () => {
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
           const distance =
-            (particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x) +
-            (particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y);
+            (particlesArray[a].x - particlesArray[b].x) *
+              (particlesArray[a].x - particlesArray[b].x) +
+            (particlesArray[a].y - particlesArray[b].y) *
+              (particlesArray[a].y - particlesArray[b].y);
 
-          if (distance < (canvas.width / 7) * (canvas.height / 7)) {
+          if (
+            distance <
+            (currentCanvas.width / 7) * (currentCanvas.height / 7)
+          ) {
             opacityValue = 1 - distance / 20000;
             if (!ctx) return;
             // Line color (Cyan with dynamic opacity)
