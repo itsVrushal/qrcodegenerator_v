@@ -2,7 +2,12 @@
 
 import React, { useState, useEffect } from "react";
 
-export default function Navbar({ theme, toggleTheme }) {
+interface NavbarProps {
+  theme: "light" | "dark";
+  toggleTheme: () => void; // Defines a function that takes no args and returns nothing
+}
+
+export default function Navbar({ theme, toggleTheme }: NavbarProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const isDark = theme === "dark";
 
