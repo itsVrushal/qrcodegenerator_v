@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Experience Liftoff</title>
+    <style>
+        /* --- RESET & CORE STYLES --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #ffffff; /* Light Theme Background */
+            color: #202124; /* Dark Grey Text */
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- PARTICLE BACKGROUND --- */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* Behind content */
+            opacity: 0.6;
+        }
+
+        /* --- MAIN CONTENT WRAPPER --- */
+        .welcome-wrapper {
+            position: relative;
+            z-index: 1; /* Above canvas */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* --- LOGO AREA --- */
+        .logo-container {
+            margin-bottom: 40px;
+            animation: floatUp 1s ease-out forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        /* SVG Logo Placeholder styling */
+        .logo svg {
+            height: 40px;
+            width: auto;
+        }
+
+        /* --- HEADLINES --- */
+        .header-container {
+            margin-bottom: 48px;
+            animation: floatUp 1s ease-out 0.2s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        h1.landing-main-header {
+            font-size: 4rem; /* Large, bold text */
+            font-weight: 600;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            color: #202124;
+        }
+
+        h1 span {
+            display: block;
+        }
+
+        /* --- BUTTONS --- */
+        .welcome-cta {
+            display: flex;
+            gap: 16px;
+            animation: floatUp 1s ease-out 0.4s forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0 24px;
+            height: 48px;
+            font-size: 1rem;
+            font-weight: 500;
+            border-radius: 24px; /* Pill shape */
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        /* Primary Button (Blue/Black) */
+        .button-primary {
+            background-color: #1a73e8; /* Google Blue-ish */
+            color: white;
+        }
+        
+        .button-primary:hover {
+            background-color: #1557b0;
+            box-shadow: 0 4px 12px rgba(26, 115, 232, 0.3);
+        }
+
+        /* Secondary Button (Outline/Grey) */
+        .button-secondary {
+            background-color: transparent;
+            color: #1a73e8;
+            border: 1px solid #dadce0;
+        }
+
+        .button-secondary:hover {
+            background-color: #f8f9fa;
+            border-color: #1a73e8;
+        }
+
+        .icon {
+            margin-right: 8px;
+            display: flex;
+        }
+
+        /* --- ANIMATIONS --- */
+        @keyframes floatUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Responsive adjustments */
+        @media (max-width: 768px) {
+            h1.landing-main-header {
+                font-size: 2.5rem;
+            }
+            .welcome-cta {
+                flex-direction: column;
+                width: 100%;
+                max-width: 300px;
+            }
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Canvas -->
+    <canvas id="particle-canvas"></canvas>
+
+    <!-- Main Content -->
+    <section class="welcome-wrapper">
+        
+        <!-- Logo Section -->
+        <div class="logo-container">
+            <div class="logo">
+                <!-- Using a simplified SVG placeholder inspired by the snippet -->
+                <svg viewBox="0 0 230 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                   <text x="0" y="30" fill="#202124" font-family="Arial" font-weight="bold" font-size="28">antigravity</text>
+                   <!-- Small orbit dot -->
+                   <circle cx="160" cy="10" r="4" fill="#3186FF"/> 
+                </svg>
+            </div>
+        </div>
+
+        <!-- Headline -->
+        <div class="header-container">
+            <h1 class="landing-main-header">
+                <span>Experience liftoff</span>
+                <span style="color: #5f6368;">with the next-generation IDE</span>
+            </h1>
+        </div>
+
+        <!-- Buttons -->
+        <div class="welcome-cta">
+            <button type="button" class="button button-primary">
+                <span class="icon">
+                    <!-- Windows Icon SVG -->
+                    <svg width="18" height="18" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M17.5 11.3H9.2V17.3L17.5 18.5V11.3Z" fill="currentColor"/>
+                        <path d="M8.7 11.3H2.5V16.3L8.7 17.2V11.3Z" fill="currentColor"/>
+                        <path d="M17.5 3.5L9.2 4.7V10.8H17.5V3.5Z" fill="currentColor"/>
+                        <path d="M8.7 4.8L2.5 5.6V10.8H8.7V4.8Z" fill="currentColor"/>
+                    </svg>
+                </span>
+                Download for Windows
+            </button>
+            
+            <button type="button" class="button button-secondary">
+                Explore use cases
+            </button>
+        </div>
+
+    </section>
+
+    <script>
+        /* --- CUSTOM PARTICLE ENGINE --- */
+        // This script creates a floating network of particles connected by lines,
+        // mimicking the "antigravity" physics effect.
+
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+
+        let particlesArray;
+        const mouse = { x: null, y: null, radius: 150 };
+
+        // Handle Resize
+        window.addEventListener('resize', function() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        // Mouse interaction
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            
+            // Draw individual particle
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#bdc1c6'; // Light grey particles
+                ctx.fill();
+            }
+
+            // Update particle position
+            update() {
+                // Check if particle is within canvas boundaries
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+
+                // Collision detection with mouse (Antigravity effect: push away)
+                let dx = mouse.x - this.x;
+                let dy = mouse.y - this.y;
+                let distance = Math.sqrt(dx*dx + dy*dy);
+
+                if (distance < mouse.radius + this.size) {
+                    if (mouse.x < this.x && this.x < canvas.width - this.size * 10) {
+                        this.x += 2;
+                    }
+                    if (mouse.x > this.x && this.x > this.size * 10) {
+                        this.x -= 2;
+                    }
+                    if (mouse.y < this.y && this.y < canvas.height - this.size * 10) {
+                        this.y += 2;
+                    }
+                    if (mouse.y > this.y && this.y > this.size * 10) {
+                        this.y -= 2;
+                    }
+                }
+
+                // Move particle
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        // Initialize particles
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 3) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 1) - 0.5;
+                let directionY = (Math.random() * 1) - 0.5;
+                let color = '#bdc1c6';
+
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        // Connect particles with lines if close enough
+        function connect() {
+            let opacityValue = 1;
+            for (let a = 0; a < particlesArray.length; a++) {
+                for (let b = a; b < particlesArray.length; b++) {
+                    let distance = ((particlesArray[a].x - particlesArray[b].x) * (particlesArray[a].x - particlesArray[b].x))
+                                 + ((particlesArray[a].y - particlesArray[b].y) * (particlesArray[a].y - particlesArray[b].y));
+                    
+                    if (distance < (canvas.width/7) * (canvas.height/7)) {
+                        opacityValue = 1 - (distance/20000);
+                        ctx.strokeStyle = 'rgba(200, 200, 200,' + opacityValue + ')'; // Grey lines
+                        ctx.lineWidth = 1;
+                        ctx.beginPath();
+                        ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
+                        ctx.lineTo(particlesArray[b].x, particlesArray[b].y);
+                        ctx.stroke();
+                    }
+                }
+            }
+        }
+
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+            connect();
+        }
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
